@@ -6,7 +6,7 @@ config.shopee = { freedelivery: 18, standard: 12 };
 // 16% com antecipação automatica ativada, taxa somente no produto
 config.magalu = { standard: 16 };
 
-//Frete gratis Produtos >= R$80,00 16% + valor tabela, custo fixo R$5 abaixo R$79,00 16% + R$5
+//Frete gratis Produtos >= R$39,99 16% + valor tabela, abaixo R$40 16%
 config.b2w = {
   standard: [16, 5],
   freedelivery: 16,
@@ -116,6 +116,7 @@ async function update() {
   const embalagem = 0.6;
   const comissao = 1;
   const aliquota_frete = 0.86;
+  const uberflash = 12;
 
   //Custo variável
   const imposto = 4;
@@ -126,27 +127,17 @@ async function update() {
     b2wtax: 16,
     mltax: resp.Premium.sale_fee_amount,
   };
-  const custo =
-    parseFloat(elem.custo.value) * parseFloat(elem.quantidade.value);
+  const custo = parseFloat(elem.custo.value);
   const lucroliquido = (custo * parseFloat(elem.margem.value)) / 100;
-  const custo_total =
-    custo + embalagem + comissao + aliquota_frete + lucroliquido;
-  const ml5tax =
-    custo_total / (1 - (mktax.mltax + imposto) / 100) >= 79 ? 0 : 5;
-  let mlvalfrete =
-    ml5tax <= 0
-      ? config.ml.peso[elem.peso.value] -
-        (config.ml.peso[elem.peso.value] *
-          config.ml.reputacao[elem.reputacaoml.value]) /
-          100
-      : 0;
-  mlvalfrete =
-    elem.reputacaoml.value == 3 ? config.ml.peso[elem.peso.value] : mlvalfrete;
+  const custo_total = custo + embalagem + comissao + aliquota_frete + lucroliquido;
+  const ml5tax = custo_total / (1 - (mktax.mltax + imposto) / 100) >= 79 ? 0 : 5;
+  const mg3tax = 3;
+  let mlvalfrete = ml5tax <= 0 ? config.ml.peso[elem.peso.value] - (config.ml.peso[elem.peso.value] * config.ml.reputacao[elem.reputacaoml.value]) /100 : 0;
+  mlvalfrete = elem.reputacaoml.value == 3 ? config.ml.peso[elem.peso.value] : mlvalfrete;
 
   const vendashopee = custo_total / (1 - (mktax.shopeetax + imposto) / 100);
-  const vendamagalu = custo_total / (1 - (mktax.magalutax + imposto) / 100);
-  const vendaml =
-    (custo_total + ml5tax) / (1 - (mktax.mltax + imposto) / 100) + mlvalfrete;
+  const vendamagalu = (custo_total + mg3tax) / (1 - (mktax.magalutax + imposto) / 100);
+  const vendaml = (custo_total + ml5tax + uberflash) / (1 - (mktax.mltax + imposto) / 100) + mlvalfrete;
   const vendab2w = custo_total / (1 - (mktax.b2wtax + imposto) / 100);
 
   console.log({
@@ -159,8 +150,7 @@ async function update() {
     'pt-BR',
     { style: 'currency', currency: 'BRL' }
   );
-  let lucrobrutoshopee =
-    vendashopee * (1 - (mktax.shopeetax + imposto) / 100) - custo;
+  let lucrobrutoshopee = vendashopee * (1 - (mktax.shopeetax + imposto) / 100);
 
   document.getElementById('shopeelucrobruto').innerHTML =
     lucrobrutoshopee.toLocaleString('pt-BR', {
@@ -178,8 +168,7 @@ async function update() {
     'pt-BR',
     { style: 'currency', currency: 'BRL' }
   );
-  let lucrobrutomagalu =
-    vendamagalu * (1 - (mktax.magalutax + imposto) / 100) - custo;
+  let lucrobrutomagalu = vendamagalu * (1 - (mktax.magalutax + imposto) / 100) - mg3tax;
   document.getElementById('magalulucrobruto').innerHTML =
     lucrobrutomagalu.toLocaleString('pt-BR', {
       style: 'currency',
@@ -206,7 +195,7 @@ async function update() {
     { style: 'currency', currency: 'BRL' }
   );
   let lucrobrutoml =
-    vendaml * (1 - (mktax.mltax + imposto) / 100) - custo - ml5tax;
+    vendaml * (1 - (mktax.mltax + imposto) / 100) - ml5tax;
   document.getElementById('ml-lucrobruto').innerHTML =
     lucrobrutoml.toLocaleString('pt-BR', {
       style: 'currency',
