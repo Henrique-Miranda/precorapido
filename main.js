@@ -1,68 +1,5 @@
 const config = {};
 
-//14% mais 6% com frete gratis, taxa somente no produto
-config.shopee = { freedelivery: 20, standard: 14 };
-
-// 16% com antecipação automatica ativada, taxa somente no produto
-config.magalu = { standard: 16 };
-
-//Frete gratis Produtos >= R$39,99 16% + valor tabela, abaixo R$40 16%
-config.b2w = {
-  standard: [16, 5],
-  freedelivery: 16,
-  // Grupo 1: 0 a 119 pontos
-  // Grupo 2: 120 a 149 40% desconto
-  // Grupo 3: Apartir de 150 pontos 50% desconto
-  //Fulfillment frete gratis pela b2w
-  peso: [
-    { 1: 32.9 },
-    { 2: 35.9 },
-    { 3: 36.9 },
-    { 4: 45.9 },
-    { 5: 67.9 },
-    { 6: 91.9 },
-    { 7: 104.9 },
-    { 8: 112.9 },
-    { 9: 119.9 },
-  ],
-};
-
-//Frete gratis Produtos >= R$79,00, custo fixo R$5 abaixo R$79,00
-config.ml = {
-  // Laranja ou Vermelho: Sem desconto
-  // Amarelo e Sem Reputação: 40% desconto
-  // Mercado Lider, Lojas Oficiais e Verde: 50% desconto
-  //Fulfillment: 9,1%
-  peso: {
-    1: 32.9,
-    2: 35.9,
-    3: 36.9,
-    4: 45.9,
-    5: 67.9,
-    6: 106.9,
-    7: 118.9,
-    8: 138.9,
-    9: 159.9,
-    10: 181.9,
-  },
-  reputacao: { 1: 50, 2: 40, 3: 0 },
-};
-
-//16% na soma do produto mais frete
-config.amazon = { standard: 16 };
-
-// Em breve
-config.via = {};
-
-// Em breve
-config.carrefour = {};
-
-// Em breve
-config.madeiramadeira = {};
-
-//Em breve
-config.GPA = {};
-
 async function listingPrice(desc, price, quantity = 1) {
   let resp = await fetch(
     `https://api.mercadolibre.com/sites/MLB/domain_discovery/search?limit=1&q=${encodeURIComponent(
@@ -122,7 +59,7 @@ async function update() {
   const imposto = 4;
   const resp = await listingPrice(elem.descricao.value, 100);
   const mktax = {
-    shopeetax: 18,
+    shopeetax: 20,
     magalutax: 16,
     b2wtax: 16,
     mltax: resp.Premium.sale_fee_amount,
