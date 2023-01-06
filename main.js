@@ -1,7 +1,7 @@
 const config = {};
 
-//12% mais 6% com frete gratis, taxa somente no produto
-config.shopee = { freedelivery: 18, standard: 12 };
+//14% mais 6% com frete gratis, taxa somente no produto
+config.shopee = { freedelivery: 20, standard: 14 };
 
 // 16% com antecipação automatica ativada, taxa somente no produto
 config.magalu = { standard: 16 };
