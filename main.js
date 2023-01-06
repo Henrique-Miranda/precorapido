@@ -1,5 +1,3 @@
-const config = {};
-
 async function listingPrice(desc, price, quantity = 1) {
   let resp = await fetch(
     `https://api.mercadolibre.com/sites/MLB/domain_discovery/search?limit=1&q=${encodeURIComponent(
