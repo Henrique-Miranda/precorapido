@@ -75,11 +75,6 @@ async function update() {
   const vendaml = (custo_total + ml5tax + uberflash) / (1 - (mktax.mltax + imposto) / 100) + mlvalfrete;
   const vendab2w = custo_total / (1 - (mktax.b2wtax + imposto) / 100);
 
-  console.log({
-    frete: mlvalfrete,
-    peso: config.ml.peso[elem.peso.value],
-    reputacao: config.ml.reputacao[elem.reputacaoml.value],
-  });
   //Shopee
   document.getElementById('shopeeval').innerHTML = vendashopee.toLocaleString(
     'pt-BR',
