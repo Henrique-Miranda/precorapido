@@ -1,1 +1,1 @@
-# precorapido.github.io
+# https://henrique-miranda.github.io/precorapido/
